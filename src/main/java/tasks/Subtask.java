@@ -115,7 +115,7 @@ public class Subtask extends Task {
                 + getName() + ","
                 + getStatus() + ","
                 + getDesc() + ","
-                + getEpic().getId();
+                + getEpicId();
     }
 
 

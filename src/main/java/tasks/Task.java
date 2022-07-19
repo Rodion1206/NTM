@@ -49,6 +49,14 @@ public class Task {
         this.status = status;
     }
 
+    public TaskType getType() {
+        return type;
+    }
+
+    public void setType(TaskType type) {
+        this.type = type;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, name, desc);
@@ -75,11 +83,5 @@ public class Task {
                 + getDesc();
     }
 
-    public TaskType getType() {
-        return type;
-    }
 
-    public void setType(TaskType type) {
-        this.type = type;
-    }
 }

@@ -4,6 +4,7 @@ import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
 
+import javax.swing.plaf.synth.SynthButtonUI;
 import java.util.List;
 
 public class Main {
@@ -63,6 +64,11 @@ public class Main {
         List<Task> history = fileBackedTasksManager.getHistory();
         for (Task t : history) {
             System.out.println(t);
+        }
+
+        List<Subtask> sl = fileBackedTasksManager.getAllSubtasksAsList();
+        for (Subtask s: sl) {
+            System.out.println(s.getType());
         }
     }
 }

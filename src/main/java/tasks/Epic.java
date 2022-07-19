@@ -57,42 +57,42 @@ public class Epic extends Task {
 
     @Override
     public int getId() {
-        return super.getId();
+        return this.id;
     }
 
     @Override
     public void setId(int id) {
-        super.setId(id);
+        this.id = id;
     }
 
     @Override
     public String getName() {
-        return super.getName();
+        return this.name;
     }
 
     @Override
     public void setName(String name) {
-        super.setName(name);
+        this.name = name;
     }
 
     @Override
     public String getDesc() {
-        return super.getDesc();
+        return this.desc;
     }
 
     @Override
     public void setDesc(String desc) {
-        super.setDesc(desc);
+        this.desc = desc;
     }
 
     @Override
     public Status getStatus() {
-        return super.getStatus();
+        return this.status;
     }
 
     @Override
     public void setStatus(Status status) {
-        super.setStatus(status);
+        this.status = status;
     }
 
     @Override

@@ -1,11 +1,10 @@
 id,type,name,status,description,-epicId-,startTime,duration
 0,TASK,Task1,NEW,desc for task1
 1,TASK,Task2,IN_PROGRESS,desc for task2
-4,TASK,subtask1,NEW,desc of subtask1
-5,TASK,subtask2,IN_PROGRESS,desc of subtask2
-6,TASK,subtask3,DONE,desc of subtask3
-7,TASK,subtask3,DONE,desc of subtask3
-2,EPIC,Epic1 with tree subtasks,IN_PROGRESS,desc
 3,EPIC,Epic2 with 1 subtask,DONE,desc of epic2
+4,SUBTASK,subtask1,NEW,desc of subtask1,2
+5,SUBTASK,subtask2,IN_PROGRESS,desc of subtask2,2
+6,SUBTASK,subtask3,DONE,desc of subtask3,2
+7,SUBTASK,subtask3,DONE,desc of subtask3,3
 
-1,0,4,5,6,2,7
+1,0,7

@@ -23,6 +23,18 @@ public class InMemoryTaskManager implements TaskManager {
         this.allSubtasks = new HashMap<>();
         this.allEpics = new HashMap<>();
         this.historyManager = Managers.getDefaultHistory();
+        this.tasksByPriority = new TreeMap<LocalDateTime, Task>(new Comparator<LocalDateTime>() {
+            @Override
+            public int compare(LocalDateTime o1, LocalDateTime o2) {
+                if (o1.isAfter(o2)) {
+                    return -1;
+                } else if (o1.isBefore(o2)) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
     }
 
     public int generateId() {
@@ -56,6 +68,14 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         return false;
+    }
+
+    public List<Task> getPrioritizedTasks(){
+        List<Task> result = new ArrayList<>();
+        for (Task t : tasksByPriority.values()) {
+            result.add(t);
+        }
+        return result;
     }
 
     // Просмотр истории задач - просмотром считается вызов по идентификатору
@@ -175,6 +195,7 @@ public class InMemoryTaskManager implements TaskManager {
         // проверять на пересечение по времени
 
         allTasks.put(t.getId(), t);
+        tasksByPriority.put(t.getStartTime(), t);
     }
 
     @Override
@@ -200,6 +221,7 @@ public class InMemoryTaskManager implements TaskManager {
         // проверять на пересечение по времени
 
         allSubtasks.put(s.getId(), s);
+        tasksByPriority.put(s.getStartTime(), s);
     }
 
     @Override

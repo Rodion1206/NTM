@@ -173,7 +173,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         } finally {
             save();
         }
-
     }
 
     public void save() {

@@ -20,12 +20,14 @@ public class CsvTaskSerializer {
         String[] splitString = taskCsv.split(",");
 
         if (splitString[1].equals("TASK")) {
-            return new Task(Integer.parseInt(splitString[0]), splitString[2], splitString[4], defineStatus(splitString[3]));
+            return new Task(Integer.parseInt(splitString[0]), splitString[2], splitString[4], defineStatus(splitString[3]),
+                    LocalDateTime.parse(splitString[6]), Long.parseLong(splitString[7]));
         } else if (splitString[1].equals("SUBTASK")) {
-            // params - id, name, description, status, epic, epicId
-            return new Subtask(Integer.parseInt(splitString[0]), splitString[2], splitString[4], defineStatus(splitString[3]),
-                    null, Integer.parseInt(splitString[5]));
+            // int id, String name, String desc, Status status, Epic epic, int epicId, LocalDateTime startTime, Long duration
+            return new Subtask(Integer.parseInt(splitString[0]), splitString[2], splitString[4], defineStatus(splitString[3]), null,
+                    Integer.parseInt(splitString[5]), LocalDateTime.parse(splitString[6]), Long.parseLong(splitString[7]));
         } else {
+
             return new Epic(Integer.parseInt(splitString[0]), splitString[2], splitString[4], defineStatus(splitString[3]));
         }
     }

@@ -4,10 +4,8 @@ import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private int idCounter;
@@ -16,6 +14,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected Map<Integer, Epic> allEpics;
     private final static int MAX_LIST_SIZE = 10;
     protected HistoryManager historyManager;
+    protected TreeMap<LocalDateTime, Task> tasksByPriority;
 
 
     public InMemoryTaskManager() {
@@ -29,6 +28,34 @@ public class InMemoryTaskManager implements TaskManager {
     public int generateId() {
         this.idCounter += 1;
         return this.idCounter;
+    }
+
+    public boolean isIntersection(Task task, Task t) {
+        if (t.getStartTime().isBefore(task.getStartTime()) && t.getEndTime().isBefore(task.getEndTime())
+                && t.getEndTime().isAfter(task.getStartTime())) {
+            return true;
+        }
+        if (t.getStartTime().isAfter(task.getStartTime()) && t.getEndTime().isAfter(task.getEndTime())
+                && t.getStartTime().isBefore(task.getEndTime())){
+            return true;
+        }
+        if (t.getStartTime().isAfter(task.getStartTime()) && t.getEndTime().isBefore(task.getEndTime())) {
+            return true;
+        }
+        if (t.getStartTime().isBefore(task.getStartTime()) && t.getEndTime().isAfter(task.getEndTime())) {
+            return true;
+        }
+        if (t.getStartTime().equals(task.getStartTime()) && t.getEndTime().equals(task.getEndTime())) {
+            return true;
+        }
+        if (t.getStartTime().equals(task.getStartTime())) {
+            return true;
+        }
+        if (t.getEndTime().equals(task.getEndTime())) {
+            return true;
+        }
+
+        return false;
     }
 
     // Просмотр истории задач - просмотром считается вызов по идентификатору
@@ -78,6 +105,8 @@ public class InMemoryTaskManager implements TaskManager {
         for (Epic e : allEpics.values()) {
             e.setSubtaskOfEpic(new HashMap<>());
             e.defineEpicStatus();
+            e.setDuration(0L);
+            e.setStartTime(null);
             allEpics.put(e.getId(), e);
         }
     }
@@ -128,6 +157,23 @@ public class InMemoryTaskManager implements TaskManager {
         if (allTasks.containsKey(t.getId())) {
             return;
         }
+
+        // проверять на пересечение по времени
+        for (Task task : allTasks.values()) {
+            if (isIntersection(task, t)) {
+                System.out.println("Задача " + t.getId() + " пересекается по времени с задачей " + task.getId());
+                return;
+            }
+        }
+
+        for (Subtask subtask : allSubtasks.values()) {
+            if (isIntersection(subtask, t)) {
+                System.out.println("Задача " + t.getId() + " пересекается по времени с подзадачей " + subtask.getId());
+                return;
+            }
+        }
+        // проверять на пересечение по времени
+
         allTasks.put(t.getId(), t);
     }
 
@@ -136,6 +182,23 @@ public class InMemoryTaskManager implements TaskManager {
         if (allSubtasks.containsKey(s.getId())) {
             return;
         }
+
+        // проверять на пересечение по времени
+        for (Task task : allTasks.values()) {
+            if (isIntersection(task, s)) {
+                System.out.println("Подзадача " + s.getId() + " пересекается по времени с задачей " + task.getId());
+                return;
+            }
+        }
+
+        for (Subtask subtask : allSubtasks.values()) {
+            if (isIntersection(subtask, s)) {
+                System.out.println("Подзадача " + s.getId() + " пересекается по времени с подзадачей " + subtask.getId());
+                return;
+            }
+        }
+        // проверять на пересечение по времени
+
         allSubtasks.put(s.getId(), s);
     }
 
@@ -153,6 +216,22 @@ public class InMemoryTaskManager implements TaskManager {
         if (!allTasks.containsKey(t.getId())) {
             return;
         }
+        // проверять на пересечение по времени
+        for (Task task : allTasks.values()) {
+            if (isIntersection(task, t)) {
+                System.out.println("Задача " + t.getId() + " пересекается по времени с задачей " + task.getId());
+                return;
+            }
+        }
+
+        for (Subtask subtask : allSubtasks.values()) {
+            if (isIntersection(subtask, t)) {
+                System.out.println("Задача " + t.getId() + " пересекается по времени с подзадачей " + subtask.getId());
+                return;
+            }
+        }
+        // проверять на пересечение по времени
+
         allTasks.put(t.getId(), t);
     }
 
@@ -161,6 +240,22 @@ public class InMemoryTaskManager implements TaskManager {
         if (!allSubtasks.containsKey(s.getId())) {
             return;
         }
+        // проверять на пересечение по времени
+        for (Task task : allTasks.values()) {
+            if (isIntersection(task, s)) {
+                System.out.println("Подзадача " + s.getId() + " пересекается по времени с задачей " + task.getId());
+                return;
+            }
+        }
+
+        for (Subtask subtask : allSubtasks.values()) {
+            if (isIntersection(subtask, s)) {
+                System.out.println("Подзадача " + s.getId() + " пересекается по времени с подзадачей " + subtask.getId());
+                return;
+            }
+        }
+        // проверять на пересечение по времени
+
         Epic checkedEpic = s.getEpic();
         allSubtasks.put(s.getId(), s);
         checkedEpic.addSubtaskToEpic(s);

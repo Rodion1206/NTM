@@ -7,7 +7,7 @@ public class Epic extends Task {
     private Map<Integer, Subtask> subtasksOfEpic;
 
     public Epic(int id, String name, String desc, Status status) {
-        super(id, name, desc, status);
+        super(id, name, desc, status, null, 0L);
         subtasksOfEpic = new HashMap<>();
         this.type = TaskType.EPIC;
     }
@@ -46,12 +46,62 @@ public class Epic extends Task {
     public void addSubtaskToEpic(Subtask subtask) {
         subtasksOfEpic.put(subtask.getId(), subtask);
         defineEpicStatus();
+        //пересчет времени
+        LocalDateTime startTime = getStartTime();
+        Long duration = getDuration();
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
     public void removeSubtaskFromEpic(Subtask subtask) {
         if (subtasksOfEpic.containsKey(subtask.getId())) {
             subtasksOfEpic.remove(subtask.getId());
             this.defineEpicStatus();
+            //пересчет времени
+            LocalDateTime startTime = getStartTime();
+            Long duration = getDuration();
+            this.startTime = startTime;
+            this.duration = duration;
+        }
+    }
+
+    @Override
+    public LocalDateTime getStartTime() {
+        List<Subtask> subtasks = new ArrayList<>();
+        for (Subtask s : subtasksOfEpic.values()) {
+            subtasks.add(s);
+        }
+        Optional<LocalDateTime> result = subtasks.stream().map(s -> s.getStartTime()).min(Comparator.naturalOrder());
+
+        if (result.isPresent()){
+            return result.get();
+        } else {
+            return null;
+        }
+
+    }
+
+    @Override
+    public Long getDuration() {
+        long totalDuration = 0;
+        for (Subtask s : subtasksOfEpic.values()) {
+            totalDuration += s.getDuration();
+        }
+        return totalDuration;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        List<Subtask> subtasks = new ArrayList<>();
+        for (Subtask s : subtasksOfEpic.values()) {
+            subtasks.add(s);
+        }
+        Optional<LocalDateTime> result = subtasks.stream().map(s -> s.getStartTime().plusMinutes(s.getDuration()))
+                .max(Comparator.naturalOrder());
+        if (result.isPresent()) {
+            return result.get();
+        } else {
+            return null;
         }
     }
 
@@ -121,7 +171,10 @@ public class Epic extends Task {
                 + this.getType() + ","
                 + this.getName() + ","
                 + this.getStatus() + ","
-                + this.getDesc();
+                + this.getDesc() + ","
+                + " " +","
+                + this.getStartTime() + ","
+                + this.getDuration();
     }
 
     public List<Subtask> getSubtaskOfEpic() {
@@ -134,5 +187,10 @@ public class Epic extends Task {
 
     public void setSubtaskOfEpic(Map<Integer, Subtask> subtaskOfEpic) {
         this.subtasksOfEpic = subtaskOfEpic;
+        //пересчет времени
+        LocalDateTime startTime = getStartTime();
+        Long duration = getDuration();
+        this.startTime = startTime;
+        this.duration = duration;
     }
 }

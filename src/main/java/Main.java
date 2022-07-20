@@ -5,6 +5,7 @@ import tasks.Subtask;
 import tasks.Task;
 
 import javax.swing.plaf.synth.SynthButtonUI;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Main {
@@ -12,20 +13,26 @@ public class Main {
 
 //        // Блок для теста fileBacked
 //        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager("data.csv");
-//        Task task1 = new Task(fileBackedTasksManager.generateId(), "Task1", "desc for task1", Status.NEW);
-//        Task task2 = new Task(fileBackedTasksManager.generateId(), "Task2", "desc for task2", Status.IN_PROGRESS);
+//        Task task1 = new Task(fileBackedTasksManager.generateId(), "Task1", "desc for task1", Status.NEW,
+//                LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0), 20L);
+//        Task task2 = new Task(fileBackedTasksManager.generateId(), "Task2", "desc for task2", Status.IN_PROGRESS,
+//                LocalDateTime.of(2001, 1, 1, 0, 0, 0, 0), 20L);
 //
 //        // 2
 //        Epic epic1 = new Epic(fileBackedTasksManager.generateId(), "Epic1 with tree subtasks", "desc", Status.NEW);
 //        Epic epic2 = new Epic(fileBackedTasksManager.generateId(), "Epic2 with 1 subtask", "desc of epic2", Status.NEW);
 //
-//        Subtask subtask1 = new Subtask(fileBackedTasksManager.generateId(), "subtask1", "desc of subtask1", Status.NEW);
+//        Subtask subtask1 = new Subtask(fileBackedTasksManager.generateId(), "subtask1", "desc of subtask1", Status.NEW,
+//                LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0), 20L);
 //
-//        Subtask subtask2 = new Subtask(fileBackedTasksManager.generateId(), "subtask2", "desc of subtask2", Status.IN_PROGRESS);
+//        Subtask subtask2 = new Subtask(fileBackedTasksManager.generateId(), "subtask2", "desc of subtask2", Status.IN_PROGRESS,
+//                LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0), 20L);
 //
-//        Subtask subtask3 = new Subtask(fileBackedTasksManager.generateId(), "subtask3", "desc of subtask3", Status.DONE);
+//        Subtask subtask3 = new Subtask(fileBackedTasksManager.generateId(), "subtask3", "desc of subtask3", Status.DONE,
+//                LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0), 20L);
 //
-//        Subtask subtask4 = new Subtask(fileBackedTasksManager.generateId(), "subtask3", "desc of subtask3", Status.DONE);
+//        Subtask subtask4 = new Subtask(fileBackedTasksManager.generateId(), "subtask3", "desc of subtask3", Status.DONE,
+//                LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0), 20L);
 //
 //        subtask1.setEpic(epic1);
 //        subtask2.setEpic(epic1);
@@ -63,13 +70,10 @@ public class Main {
 
         FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile();
         List<Task> history = fileBackedTasksManager.getHistory();
+        System.out.println("Загруженная история");
         for (Task t : history) {
             System.out.println(t);
         }
 
-//        List<Subtask> sl = fileBackedTasksManager.getAllSubtasksAsList();
-//        for (Subtask s: sl) {
-//            System.out.println(s.getType());
-//        }
     }
 }

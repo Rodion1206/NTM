@@ -7,21 +7,41 @@ public class Subtask extends Task {
     private Epic epic;
     private int epicId;
 
-    public Subtask(int id, String name, String desc, Status status) {
-        super(id, name, desc, status);
+    public Subtask(int id, String name, String desc, Status status, LocalDateTime startTime, Long duration) {
+        super(id, name, desc, status, startTime, duration);
         this.type = TaskType.SUBTASK;
     }
 
-//    public Epic Subtask(int id, String name, String desc, Status status, Epic epic) {
-//        super(id, name, desc, status);
-//        this.epic = epic;
-//        this.type = TaskType.SUBTASK;
-
-    public Subtask(int id, String name, String desc, Status status, Epic epic, int epicId) {
-        super(id, name, desc, status);
+    public Subtask(int id, String name, String desc, Status status, Epic epic, int epicId, LocalDateTime startTime, Long duration) {
+        super(id, name, desc, status, startTime, duration);
         this.epic = epic;
         this.type = TaskType.SUBTASK;
         this.epicId = epicId;
+    }
+
+    @Override
+    public LocalDateTime getStartTime() {
+        return this.startTime;
+    }
+
+    @Override
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    @Override
+    public Long getDuration() {
+        return this.duration;
+    }
+
+    @Override
+    public void setDuration(Long duration) {
+        this.duration = duration;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return startTime.plusMinutes(duration);
     }
 
     public Epic getEpic() {
@@ -115,7 +135,9 @@ public class Subtask extends Task {
                 + getName() + ","
                 + getStatus() + ","
                 + getDesc() + ","
-                + getEpicId();
+                + getEpicId() + ","
+                + getStartTime() + ","
+                + getDuration();
     }
 
 

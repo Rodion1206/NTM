@@ -1,5 +1,7 @@
 id,type,name,status,description,-epicId-,startTime,duration
 0,TASK,Task1,NEW,desc for task1, ,2000-01-01T00:00,20
 1,TASK,Task2,IN_PROGRESS,desc for task2, ,2001-01-01T00:00,20
+2,EPIC,Epic1 with tree subtasks,IN_PROGRESS,desc, ,null,0
+3,EPIC,Epic2 with 1 subtask,DONE,desc of epic2, ,null,0
 
-0,1
+1,0,2,3

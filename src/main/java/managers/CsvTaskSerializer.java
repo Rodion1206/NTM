@@ -11,6 +11,7 @@ public class CsvTaskSerializer {
     private CsvTaskSerializer() {
 
     }
+
     //                                       0   1   2     3         4           5       6           7
     public static String HEADER() {
         return "id,type,name,status,description,-epicId-,startTime,duration";
@@ -27,7 +28,6 @@ public class CsvTaskSerializer {
             return new Subtask(Integer.parseInt(splitString[0]), splitString[2], splitString[4], defineStatus(splitString[3]), null,
                     Integer.parseInt(splitString[5]), LocalDateTime.parse(splitString[6]), Long.parseLong(splitString[7]));
         } else {
-
             return new Epic(Integer.parseInt(splitString[0]), splitString[2], splitString[4], defineStatus(splitString[3]));
         }
     }

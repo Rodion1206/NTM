@@ -1,7 +1,11 @@
 id,type,name,status,description,-epicId-,startTime,duration
-0,TASK,Task1,NEW,desc for task1, ,2000-01-01T00:00,20
-1,TASK,Task2,IN_PROGRESS,desc for task2, ,2001-01-01T00:00,20
-2,EPIC,Epic1 with tree subtasks,IN_PROGRESS,desc, ,null,0
-3,EPIC,Epic2 with 1 subtask,DONE,desc of epic2, ,null,0
+0,TASK,Task1,NEW,desc for task1, ,2010-01-01T00:00,20
+1,TASK,Task2,IN_PROGRESS,desc for task2, ,2012-01-01T00:00,20
+2,EPIC,Epic1 with tree subtasks,IN_PROGRESS,desc, ,2000-01-01T00:00,60
+3,EPIC,Epic2 with 1 subtask,DONE,desc of epic2, ,2003-01-01T00:00,20
+4,SUBTASK,subtask1,NEW,desc of subtask1,2,2000-01-01T00:00,20
+5,SUBTASK,subtask2,IN_PROGRESS,desc of subtask2,2,2001-01-01T00:00,20
+6,SUBTASK,subtask3,DONE,desc of subtask3,2,2002-01-01T00:00,20
+7,SUBTASK,subtask3,DONE,desc of subtask3,3,2003-01-01T00:00,20
 
-1,0,2,3
+1,0,4,5,6,2,3,7

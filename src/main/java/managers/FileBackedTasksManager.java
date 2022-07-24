@@ -175,6 +175,16 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
+    // удаление задач эпика
+    public void removeAllSubtasksOfEpic(int epicId) {
+        for (Subtask s : allSubtasks.values()) {
+            if (s.getEpicId() == epicId) {
+                allSubtasks.remove(s.getId());
+            }
+        }
+    }
+
+    // Сохранение состояния
     public void save() {
         try {
             Writer fw = new FileWriter(pathToFile, StandardCharsets.UTF_8, false);
@@ -216,6 +226,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
+    // Восстановление состояния
     public static FileBackedTasksManager loadFromFile() {
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager("data.csv");
         int maxId = 0;
@@ -287,7 +298,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     subtask.setEpic(epicForSubtask);
                 }
 
-
                 fileBackedTasksManager.allSubtasks.put(subtask.getId(), subtask);
             }
         }
@@ -298,17 +308,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             for (Subtask subtask : fileBackedTasksManager.allSubtasks.values()) {
                 if (subtask.getEpicId() == epic.getId()) {
                     epic.addSubtaskToEpic(subtask);
-
-
                 }
             }
         }
-
 
         return fileBackedTasksManager;
 
     }
 
+    // Восстановление истории - полученных по идентификатору
     private static List<Integer> historyFromString(String value) {
         String[] historyLine = value.split(",");
 

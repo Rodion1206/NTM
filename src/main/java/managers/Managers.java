@@ -2,18 +2,18 @@ package managers;
 
 public class Managers {
 
-    private static TaskManager taskManager;
     private static HistoryManager historyManager;
+    private static FileBackedTasksManager fileBackedTasksManager;
 
     private Managers() {
 
     }
 
-    public static TaskManager getDefault() {
-        if (taskManager == null) {
-            taskManager = new InMemoryTaskManager();
+    public static FileBackedTasksManager getDefault() {
+        if (fileBackedTasksManager == null) {
+            fileBackedTasksManager = new FileBackedTasksManager("data.csv");
         }
-        return taskManager;
+        return fileBackedTasksManager;
     }
 
     public static HistoryManager getDefaultHistory() {

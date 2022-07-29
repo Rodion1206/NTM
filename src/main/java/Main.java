@@ -83,6 +83,7 @@ public class Main {
         HTTPTaskManager manager2 = new HTTPTaskManager("/localhost:8078/");
         System.out.println("Print response from server!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         manager2.loadFromServer();
+        System.out.println("Завершение");
 
         //fileBackedTasksManager.removeEpicById(2);
         // Блок для теста fileBacked

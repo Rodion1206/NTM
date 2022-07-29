@@ -45,6 +45,7 @@ public class HTTPTaskManager extends FileBackedTasksManager{
                 .registerTypeAdapter(Task.class, new TaskAdapter())
                 .registerTypeAdapter(Subtask.class, new SubtaskAdapter())
                 .registerTypeAdapter(Epic.class, new EpicAdapter())
+                .serializeNulls()
                 .create();
 
     }

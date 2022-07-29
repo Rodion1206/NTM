@@ -29,7 +29,7 @@ public class HttpTaskServer {
         httpServer.createContext("/tasks/task", new TasksHandler());
         httpServer.createContext("/tasks/subtask", new SubtaskHandler());
         httpServer.createContext("/tasks/epic", new EpicHandler());
-
+        httpServer.createContext("/tasks/history", new HistoryHandler());
         fileBackedTasksManager = Managers.getDefault();
         httpServer.start();
         System.out.println("Сервер запущен из мейна на 8080 порту");
@@ -46,6 +46,44 @@ public class HttpTaskServer {
     // addSubtask(subtask), updateSubtask(subtask)       - POST   "/tasks/subtask/ Body: {task..}"
     // removeSubtaskById()                               - DELETE "/tasks/subtask/?id="
     // removeAllSubtasks()                               - DELETE "/tasks/subtask"
+
+    class HistoryHandler implements HttpHandler{
+
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            //TaskAdapter taskAdapter = new TaskAdapter();
+            Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(Task.class, new TaskAdapter())
+                    .registerTypeAdapter(Subtask.class, new SubtaskAdapter())
+                    .registerTypeAdapter(Epic.class, new EpicAdapter())
+                    .create();
+
+            // request body
+            InputStream inputStream = exchange.getRequestBody();
+            String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+
+            // request method
+            String method = exchange.getRequestMethod();
+
+            // path request
+            String path = exchange.getRequestURI().getPath();
+            String[] splitStrings = path.split("/");
+
+            // request parameters
+            String params = exchange.getRequestURI().getRawQuery();
+
+            switch (method) {
+                case "GET": {
+                    List<Task> result = fileBackedTasksManager.getHistory();
+                    try (OutputStream os = exchange.getResponseBody()) {
+                        exchange.sendResponseHeaders(200, 0);
+                        os.write(gson.toJson(result).getBytes(StandardCharsets.UTF_8));
+                        exchange.close();
+                        return;
+                    }
+                }
+            }
+        }
+    }
 
     class TasksHandler implements HttpHandler {
 
@@ -165,7 +203,7 @@ public class HttpTaskServer {
             }
 
         }
-    } // ++++++++++
+    }
 
     class SubtaskHandler implements HttpHandler{
 
@@ -295,7 +333,7 @@ public class HttpTaskServer {
                 } // +++++++++++++++++++
             }
         }
-    } // ++++++++++
+    }
 
     class EpicHandler implements HttpHandler {
         Gson gson = new GsonBuilder().setPrettyPrinting()
@@ -428,6 +466,8 @@ public class HttpTaskServer {
         }
     }
 
+
+
     private Task createTaskFromJson(String jsonTask) throws IOException {
         int id = 0;
         String name = "";
@@ -544,10 +584,10 @@ public class HttpTaskServer {
                     reader.skipValue();
                 }
             }
-
-
         }
         reader.close();
+
+
         return new Subtask(id, name, desc, defineStatus(strStatus), null, Integer.parseInt(epicId),
                 LocalDateTime.parse(startTime), Long.parseLong(duration));
     }
@@ -622,6 +662,8 @@ public class HttpTaskServer {
             return Status.DONE;
         }
     }
+
+
 
 
     // адаптер /////////////////////////////////////////////////////////////////////

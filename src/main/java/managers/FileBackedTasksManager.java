@@ -17,6 +17,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         this.pathToFile = pathToFile;
     }
 
+    public FileBackedTasksManager() {
+    }
+
     // Простотр истории задач
     @Override
     public List<Task> getHistory() {

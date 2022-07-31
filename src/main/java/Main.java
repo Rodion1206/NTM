@@ -10,11 +10,11 @@ import java.time.LocalDateTime;
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
 
-//        try {
-//            HttpTaskServer server = new HttpTaskServer();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            HttpTaskServer server = new HttpTaskServer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
             new KVServer().start();

@@ -4,16 +4,17 @@ public class Managers {
 
     private static HistoryManager historyManager;
     private static FileBackedTasksManager fileBackedTasksManager;
+    private static HTTPTaskManager httpTaskManager;
 
     private Managers() {
 
     }
 
-    public static FileBackedTasksManager getDefault() {
-        if (fileBackedTasksManager == null) {
-            fileBackedTasksManager = new FileBackedTasksManager("data.csv");
+    public static HTTPTaskManager getDefault() {
+        if (httpTaskManager == null) {
+            httpTaskManager = new HTTPTaskManager("localhost:8087/");
         }
-        return fileBackedTasksManager;
+        return httpTaskManager;
     }
 
     public static HistoryManager getDefaultHistory() {

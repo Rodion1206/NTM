@@ -53,6 +53,15 @@ public interface TaskManager {
 
     void removeEpicById(int id);
 
+    // определить наличие в мапе
+    boolean isAllTasksContainsThisKey(int key);
+
+    boolean isAllSubtasksContainsThisKey(int key);
+
+    boolean isAllEpicsContainsThisKey(int key);
+
     // Получение списка всех подзадач определенного эпика
     List<Subtask> getAllSubtasksOfEpic(Epic e);
+
+    void removeAllSubtasksOfEpic(int id);
 }

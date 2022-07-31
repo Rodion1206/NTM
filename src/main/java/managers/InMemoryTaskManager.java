@@ -361,10 +361,30 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    @Override
+    public boolean isAllTasksContainsThisKey(int key) {
+        return allTasks.containsKey(key);
+    }
+
+    @Override
+    public boolean isAllSubtasksContainsThisKey(int key) {
+        return allSubtasks.containsKey(key);
+    }
+
+    @Override
+    public boolean isAllEpicsContainsThisKey(int key) {
+        return allEpics.containsKey(key);
+    }
+
     // Получение списка всех подзадач определенного эпика
     @Override
     public List<Subtask> getAllSubtasksOfEpic(Epic e) {
         return e.getSubtaskOfEpic();
+    }
+
+    @Override
+    public void removeAllSubtasksOfEpic(int id) {
+
     }
 
     public void setIdCounter(int idCounter) {

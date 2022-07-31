@@ -21,7 +21,7 @@ import java.util.List;
 
 public class HttpTaskServer {
     private HttpServer httpServer;
-    private FileBackedTasksManager fileBackedTasksManager;
+    private TaskManager httpTasksManager;
 
 
     public HttpTaskServer() throws IOException {
@@ -30,7 +30,7 @@ public class HttpTaskServer {
         httpServer.createContext("/tasks/subtask", new SubtaskHandler());
         httpServer.createContext("/tasks/epic", new EpicHandler());
         httpServer.createContext("/tasks/history", new HistoryHandler());
-        fileBackedTasksManager = Managers.getDefault();
+        httpTasksManager = Managers.getDefault();
         httpServer.start();
         System.out.println("Сервер запущен из мейна на 8080 порту");
     }
@@ -73,7 +73,7 @@ public class HttpTaskServer {
 
             switch (method) {
                 case "GET": {
-                    List<Task> result = fileBackedTasksManager.getHistory();
+                    List<Task> result = httpTasksManager.getHistory();
                     try (OutputStream os = exchange.getResponseBody()) {
                         exchange.sendResponseHeaders(200, 0);
                         os.write(gson.toJson(result).getBytes(StandardCharsets.UTF_8));
@@ -111,7 +111,7 @@ public class HttpTaskServer {
                 case "GET": {
                     if (params == null) {
                         // "/tasks/task" -  getAllTasks()
-                        List<Task> result = fileBackedTasksManager.getAllTasksAsList();
+                        List<Task> result = httpTasksManager.getAllTasksAsList();
                         try (OutputStream os = exchange.getResponseBody()) {
                             exchange.sendResponseHeaders(200, 0);
                             os.write(gson.toJson(result).getBytes(StandardCharsets.UTF_8));
@@ -121,7 +121,7 @@ public class HttpTaskServer {
                     } else {
                         // "/tasks/task/?id=" - getTaskById(id)
                         int id = Integer.parseInt(params.substring(3));
-                        Task result = fileBackedTasksManager.getTaskById(id);
+                        Task result = httpTasksManager.getTaskById(id);
 
                         try (OutputStream os = exchange.getResponseBody()) {
                             exchange.sendResponseHeaders(200, 0);
@@ -147,10 +147,10 @@ public class HttpTaskServer {
 
                         Task task = createTaskFromJson(body);
                         // add or update
-                        if (fileBackedTasksManager.allTasks.containsKey(task.getId())){
+                        if (httpTasksManager.isAllTasksContainsThisKey(task.getId())){
                             // update
                             try (OutputStream os = exchange.getResponseBody()) {
-                                fileBackedTasksManager.updateTask(task);
+                                httpTasksManager.updateTask(task);
                                 exchange.sendResponseHeaders(201, 0);
                                 os.write(gson.toJson("Задача обновлена").getBytes(StandardCharsets.UTF_8));
                                 exchange.close();
@@ -160,7 +160,7 @@ public class HttpTaskServer {
                         } else {
                             // add
                             try (OutputStream os = exchange.getResponseBody()) {
-                                fileBackedTasksManager.addTask(task);
+                                httpTasksManager.addTask(task);
                                 exchange.sendResponseHeaders(201, 0);
                                 os.write(gson.toJson("Задача добавлена").getBytes(StandardCharsets.UTF_8));
                                 exchange.close();
@@ -180,7 +180,7 @@ public class HttpTaskServer {
                 case "DELETE": {
                     if (params == null) {
                         try (OutputStream os = exchange.getResponseBody()) {
-                            fileBackedTasksManager.removeAllTasks();
+                            httpTasksManager.removeAllTasks();
                             exchange.sendResponseHeaders(200, 0);
                             os.write(gson.toJson("Все задачи удалены").getBytes(StandardCharsets.UTF_8));
                             exchange.close();
@@ -190,7 +190,7 @@ public class HttpTaskServer {
                     } else {
                         int id = Integer.parseInt(params.substring(3));
                         try (OutputStream os = exchange.getResponseBody()) {
-                            fileBackedTasksManager.removeTaskById(id);
+                            httpTasksManager.removeTaskById(id);
                             exchange.sendResponseHeaders(200, 0);
                             os.write(gson.toJson("Задача с id " + id + " удалена").getBytes(StandardCharsets.UTF_8));
                             exchange.close();
@@ -234,7 +234,7 @@ public class HttpTaskServer {
             switch (method) {
                 case "GET": {
                     if (params == null) {
-                        List<Subtask> result = fileBackedTasksManager.getAllSubtasksAsList();
+                        List<Subtask> result = httpTasksManager.getAllSubtasksAsList();
                         try (OutputStream os = exchange.getResponseBody()) {
                             exchange.sendResponseHeaders(200, 0);
                             os.write(gson.toJson(result).getBytes(StandardCharsets.UTF_8));
@@ -243,7 +243,7 @@ public class HttpTaskServer {
                         }
                     } else {
                         int id = Integer.parseInt(params.substring(3));
-                        Subtask result = fileBackedTasksManager.getSubtaskById(id);
+                        Subtask result = httpTasksManager.getSubtaskById(id);
 
                         try (OutputStream os = exchange.getResponseBody()) {
                             exchange.sendResponseHeaders(200, 0);
@@ -280,10 +280,10 @@ public class HttpTaskServer {
 
                         Subtask subtask = createSubtaskFromJson(body);
                         // add or update
-                        if (fileBackedTasksManager.allSubtasks.containsKey(subtask.getId())){
+                        if (httpTasksManager.isAllSubtasksContainsThisKey(subtask.getId())){
                             // update
                             try (OutputStream os = exchange.getResponseBody()) {
-                                fileBackedTasksManager.updateSubtask(subtask);
+                                httpTasksManager.updateSubtask(subtask);
                                 exchange.sendResponseHeaders(201, 0);
                                 os.write(gson.toJson("Подзадача обновлена").getBytes(StandardCharsets.UTF_8));
                                 exchange.close();
@@ -293,7 +293,7 @@ public class HttpTaskServer {
                         } else {
                             // add
                             try (OutputStream os = exchange.getResponseBody()) {
-                                fileBackedTasksManager.addSubtask(subtask);
+                                httpTasksManager.addSubtask(subtask);
                                 exchange.sendResponseHeaders(201, 0);
                                 os.write(gson.toJson("Подзадача добавлена").getBytes(StandardCharsets.UTF_8));
                                 exchange.close();
@@ -312,7 +312,7 @@ public class HttpTaskServer {
                 case "DELETE": {
                     if (params == null) {
                         try (OutputStream os = exchange.getResponseBody()) {
-                            fileBackedTasksManager.removeAllSubtasks();
+                            httpTasksManager.removeAllSubtasks();
                             exchange.sendResponseHeaders(200, 0);
                             os.write(gson.toJson("Все подзадачи удалены").getBytes(StandardCharsets.UTF_8));
                             exchange.close();
@@ -322,7 +322,7 @@ public class HttpTaskServer {
                     } else {
                         int id = Integer.parseInt(params.substring(3));
                         try (OutputStream os = exchange.getResponseBody()) {
-                            fileBackedTasksManager.removeSubtaskById(id);
+                            httpTasksManager.removeSubtaskById(id);
                             exchange.sendResponseHeaders(200, 0);
                             os.write(gson.toJson("Подзадача с id " + id + " удалена").getBytes(StandardCharsets.UTF_8));
                             exchange.close();
@@ -366,7 +366,7 @@ public class HttpTaskServer {
             switch (method) {
                 case "GET": {
                     if (params == null) {
-                        List<Epic> result = fileBackedTasksManager.getAllEpicsAsList();
+                        List<Epic> result = httpTasksManager.getAllEpicsAsList();
                         try (OutputStream os = exchange.getResponseBody()) {
                             exchange.sendResponseHeaders(200, 0);
                             os.write(gson.toJson(result).getBytes(StandardCharsets.UTF_8));
@@ -375,7 +375,7 @@ public class HttpTaskServer {
                         }
                     } else {
                         int id = Integer.parseInt(params.substring(3));
-                        Epic result = fileBackedTasksManager.getEpicById(id);
+                        Epic result = httpTasksManager.getEpicById(id);
 
                         try (OutputStream os = exchange.getResponseBody()) {
                             exchange.sendResponseHeaders(200, 0);
@@ -409,10 +409,10 @@ public class HttpTaskServer {
 
                         Epic epic = createEpicFromJson(body);
                         // add or update
-                        if (fileBackedTasksManager.allEpics.containsKey(epic.getId())){
+                        if (httpTasksManager.isAllEpicsContainsThisKey(epic.getId())){
                             // update
                             try (OutputStream os = exchange.getResponseBody()) {
-                                fileBackedTasksManager.updateEpic(epic);
+                                httpTasksManager.updateEpic(epic);
                                 exchange.sendResponseHeaders(201, 0);
                                 os.write(gson.toJson("Эпик обновлен").getBytes(StandardCharsets.UTF_8));
                                 exchange.close();
@@ -422,7 +422,7 @@ public class HttpTaskServer {
                         } else {
                             // add
                             try (OutputStream os = exchange.getResponseBody()) {
-                                fileBackedTasksManager.addEpic(epic);
+                                httpTasksManager.addEpic(epic);
                                 exchange.sendResponseHeaders(201, 0);
                                 os.write(gson.toJson("Эпик добавлен").getBytes(StandardCharsets.UTF_8));
                                 exchange.close();
@@ -441,8 +441,8 @@ public class HttpTaskServer {
                 case "DELETE": {
                     if (params == null) {
                         try (OutputStream os = exchange.getResponseBody()) {
-                            fileBackedTasksManager.removeAllEpics();
-                            fileBackedTasksManager.removeAllSubtasks();
+                            httpTasksManager.removeAllEpics();
+                            httpTasksManager.removeAllSubtasks();
                             exchange.sendResponseHeaders(200, 0);
                             os.write(gson.toJson("Все эпики и подзадачи удалены").getBytes(StandardCharsets.UTF_8));
                             exchange.close();
@@ -452,8 +452,8 @@ public class HttpTaskServer {
                     } else {
                         int id = Integer.parseInt(params.substring(3));
                         try (OutputStream os = exchange.getResponseBody()) {
-                            fileBackedTasksManager.removeEpicById(id);
-                            fileBackedTasksManager.removeAllSubtasksOfEpic(id);
+                            httpTasksManager.removeEpicById(id);
+                            httpTasksManager.removeAllSubtasksOfEpic(id);
                             exchange.sendResponseHeaders(200, 0);
                             os.write(gson.toJson("Эпик с id " + id + " и его подзадачи удалены").getBytes(StandardCharsets.UTF_8));
                             exchange.close();

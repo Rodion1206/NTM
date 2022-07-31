@@ -36,7 +36,7 @@ public class HTTPTaskManager extends FileBackedTasksManager{
 
     // urlToKVServer  localhost:8087/
 
-    public HTTPTaskManager(String urlToKVServer) throws IOException, InterruptedException {
+    public HTTPTaskManager(String urlToKVServer) {
 
         this.kvTaskClient = new KVTaskClient();
         this.urlToKVServer = urlToKVServer;
@@ -50,162 +50,6 @@ public class HTTPTaskManager extends FileBackedTasksManager{
 
     }
 
-
-
-    // Удаление всех задач
-    @Override
-    public void removeAllTasks() {
-        super.removeAllTasks();
-        save();
-    }
-
-    @Override
-    public void removeAllSubtasks() {
-        super.removeAllSubtasks();
-        save();
-    }
-
-    @Override
-    public void removeAllEpics() {
-        super.removeAllEpics();
-        save();
-    }
-
-    // Получение по идентификатору
-    @Override
-    public Task getTaskById(int id) {
-        try {
-            return super.getTaskById(id);
-        }
-        finally {
-            save();
-        }
-
-    }
-
-    @Override
-    public Subtask getSubtaskById(int id) {
-        try {
-            return super.getSubtaskById(id);
-        } finally {
-            save();
-        }
-
-    }
-
-    @Override
-    public Epic getEpicById(int id) {
-        try {
-            return super.getEpicById(id);
-        } finally {
-            save();
-        }
-
-    }
-
-    // Создание. Сам объект должен передаваться в качестве параметра
-    @Override
-    public void addTask(Task t) {
-        try {
-            super.addTask(t);
-        } finally {
-            save();
-        }
-
-    }
-
-    @Override
-    public void addSubtask(Subtask s) {
-        try {
-            super.addSubtask(s);
-        } finally {
-            save();
-        }
-
-    }
-
-    @Override
-    public void addEpic(Epic e) {
-        try {
-            super.addEpic(e);
-        } finally {
-            save();
-        }
-
-    }
-
-    // Обновление. Новая версия объекта с верным идентификатором передается в виде параметра
-    @Override
-    public void updateTask(Task t) {
-        try {
-            super.updateTask(t);
-        } finally {
-            save();
-        }
-
-    }
-
-    @Override
-    public void updateSubtask(Subtask s) {
-        try {
-            super.updateSubtask(s);
-        } finally {
-            save();
-        }
-
-    }
-
-    @Override
-    public void updateEpic(Epic e) {
-        try {
-            super.updateEpic(e);
-        } finally {
-            save();
-        }
-
-    }
-
-    // Удаление по идентификатору
-    @Override
-    public void removeTaskById(int id) {
-        try {
-            super.removeTaskById(id);
-        } finally {
-            save();
-        }
-
-    }
-
-    @Override
-    public void removeSubtaskById(int id) {
-        try {
-            super.removeSubtaskById(id);
-        } finally {
-            save();
-        }
-
-    }
-
-    @Override
-    public void removeEpicById(int id) {
-        try {
-            super.removeEpicById(id);
-        } finally {
-            save();
-        }
-
-    }
-
-    // Получение списка всех подзадач определенного эпика
-    @Override
-    public void removeAllSubtasksOfEpic(int epicId) {
-        try {
-            super.removeAllSubtasksOfEpic(epicId);
-        } finally {
-            save();
-        }
-
-    }
 
     @Override
     public void save() {
@@ -402,6 +246,9 @@ public class HTTPTaskManager extends FileBackedTasksManager{
 
     }
 
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
     // создает объект из переданных параметров
     private Task createObject(int id, String name, String desc, String strStatus, String strType, String startTime,
                               String duration, String epicId){
@@ -419,7 +266,6 @@ public class HTTPTaskManager extends FileBackedTasksManager{
         return null;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////
     class TaskAdapter extends TypeAdapter<Task> {
 
         @Override

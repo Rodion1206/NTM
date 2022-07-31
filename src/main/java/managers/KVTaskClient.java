@@ -14,7 +14,7 @@ public class KVTaskClient {
     private URI uri;
 
 
-    public KVTaskClient() throws IOException, InterruptedException {
+    public KVTaskClient() {
 
         // HTTP-клиент с настройками по умолчанию
         client = HttpClient.newHttpClient();
@@ -31,7 +31,14 @@ public class KVTaskClient {
         HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
 
         // отправляем запрос и получаем ответ от сервера
-        HttpResponse<String> response = client.send(request, handler);
+        HttpResponse<String> response = null;
+        try {
+            response = client.send(request, handler);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         // выводим код состояния и тело ответа
         System.out.println("Код ответа: " + response.statusCode());

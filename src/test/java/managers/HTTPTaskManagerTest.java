@@ -672,15 +672,24 @@ class HTTPTaskManagerTest {
 
         // Блок для теста httpTaskManager
         //FileBackedTasksManager fileBackedTasksManager = Managers.getDefault();
-        Epic epic1 = new Epic(httpTaskManager.generateId(), "Epic1", "desc", Status.NEW);
+        Epic epic1 = new Epic(1, "Epic1", "desc", Status.NEW);
         Subtask subtask1 = new Subtask(0, "subtask1", "desc of subtask1", Status.NEW,
                 LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0), 20L);
+        Subtask subtask2 = new Subtask(2, "subtask1", "desc of subtask1", Status.NEW,
+                LocalDateTime.of(2001, 1, 1, 0, 0, 0, 0), 20L);
 
+        epic1.addSubtaskToEpic(subtask1);
+        epic1.addSubtaskToEpic(subtask2);
+        subtask1.setEpic(epic1);
+        subtask2.setEpic(epic1);
+
+        httpTaskManager.addEpic(epic1);
         httpTaskManager.addSubtask(subtask1);
+        httpTaskManager.addSubtask(subtask2);
 
         httpTaskManager.removeSubtaskById(0);
 
-        Assertions.assertEquals(0, httpTaskManager.allSubtasks.size());
+        Assertions.assertEquals(1, httpTaskManager.allSubtasks.size());
     }
 
     @Test

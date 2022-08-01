@@ -11,16 +11,18 @@ public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
 
         try {
-            HttpTaskServer server = new HttpTaskServer();
+            new KVServer().start();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try {
-            new KVServer().start();
+            HttpTaskServer server = new HttpTaskServer();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
 
         HTTPTaskManager httpTaskManager = new HTTPTaskManager("/localhost:8078/");
 

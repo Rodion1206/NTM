@@ -18,66 +18,66 @@ class HTTPTaskManagerTest {
 
     @BeforeEach
     void init() throws IOException, InterruptedException {
-        try {
-            new KVServer().start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        HTTPTaskManager httpTaskManager = new HTTPTaskManager("/localhost:8078/");
-
-        // Блок для теста httpTaskManager
-        //FileBackedTasksManager fileBackedTasksManager = Managers.getDefault();
-        Task task1 = new Task(httpTaskManager.generateId(), "Task1", "desc for task1", Status.NEW,
-                LocalDateTime.of(2010, 1, 1, 0, 0, 0, 0), 20L);
-        Task task2 = new Task(httpTaskManager.generateId(), "Task2", "desc for task2", Status.IN_PROGRESS,
-                LocalDateTime.of(2012, 1, 1, 0, 0, 0, 0), 20L);
-
-        // 2
-        Epic epic1 = new Epic(httpTaskManager.generateId(), "Epic1 with three subtasks", "desc", Status.NEW);
-        Epic epic2 = new Epic(httpTaskManager.generateId(), "Epic2 with 1 subtask", "desc of epic2", Status.NEW);
-
-        Subtask subtask1 = new Subtask(httpTaskManager.generateId(), "subtask1", "desc of subtask1", Status.NEW,
-                LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0), 20L);
-
-        Subtask subtask2 = new Subtask(httpTaskManager.generateId(), "subtask2", "desc of subtask2", Status.IN_PROGRESS,
-                LocalDateTime.of(2001, 1, 1, 0, 0, 0, 0), 20L);
-
-        Subtask subtask3 = new Subtask(httpTaskManager.generateId(), "subtask3", "desc of subtask3", Status.DONE,
-                LocalDateTime.of(2002, 1, 1, 0, 0, 0, 0), 20L);
-
-        Subtask subtask4 = new Subtask(httpTaskManager.generateId(), "subtask4", "desc of subtask4", Status.DONE,
-                LocalDateTime.of(2003, 1, 1, 0, 0, 0, 0), 20L);
-
-        subtask1.setEpic(epic1);
-        subtask2.setEpic(epic1);
-        subtask3.setEpic(epic1);
-
-        epic1.addSubtaskToEpic(subtask1);
-        epic1.addSubtaskToEpic(subtask2);
-        epic1.addSubtaskToEpic(subtask4);
-
-        subtask4.setEpic(epic2);
-        epic2.addSubtaskToEpic(subtask4);
-
-
-        httpTaskManager.addTask(task1); // 0
-        httpTaskManager.addTask(task2); // 1  две задачи
-        httpTaskManager.addEpic(epic1); // 2 эпик с тремя подзадачами
-        httpTaskManager.addEpic(epic2); // 3 эпик с одной подзадачей
-        httpTaskManager.addSubtask(subtask1); // 4 подзадача эпика 1
-        httpTaskManager.addSubtask(subtask2); // 5 подзадача эпика 1
-        httpTaskManager.addSubtask(subtask3); // 6 подзадача эпика 1
-        httpTaskManager.addSubtask(subtask4); // 7 подзадача эпика 2
-
-        httpTaskManager.getTaskById(1);
-        httpTaskManager.getTaskById(0);
-        httpTaskManager.getSubtaskById(4);  // -
-        httpTaskManager.getSubtaskById(5);  // -
-        httpTaskManager.getSubtaskById(6);  // -
-        httpTaskManager.getEpicById(2); // Эпик будет удален со всеми подзадачами
-        httpTaskManager.getEpicById(3);
-        httpTaskManager.getSubtaskById(7);
+//        try {
+//            new KVServer().start();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        HTTPTaskManager httpTaskManager = new HTTPTaskManager("/localhost:8078/");
+//
+//        // Блок для теста httpTaskManager
+//        //FileBackedTasksManager fileBackedTasksManager = Managers.getDefault();
+//        Task task1 = new Task(httpTaskManager.generateId(), "Task1", "desc for task1", Status.NEW,
+//                LocalDateTime.of(2010, 1, 1, 0, 0, 0, 0), 20L);
+//        Task task2 = new Task(httpTaskManager.generateId(), "Task2", "desc for task2", Status.IN_PROGRESS,
+//                LocalDateTime.of(2012, 1, 1, 0, 0, 0, 0), 20L);
+//
+//        // 2
+//        Epic epic1 = new Epic(httpTaskManager.generateId(), "Epic1 with three subtasks", "desc", Status.NEW);
+//        Epic epic2 = new Epic(httpTaskManager.generateId(), "Epic2 with 1 subtask", "desc of epic2", Status.NEW);
+//
+//        Subtask subtask1 = new Subtask(httpTaskManager.generateId(), "subtask1", "desc of subtask1", Status.NEW,
+//                LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0), 20L);
+//
+//        Subtask subtask2 = new Subtask(httpTaskManager.generateId(), "subtask2", "desc of subtask2", Status.IN_PROGRESS,
+//                LocalDateTime.of(2001, 1, 1, 0, 0, 0, 0), 20L);
+//
+//        Subtask subtask3 = new Subtask(httpTaskManager.generateId(), "subtask3", "desc of subtask3", Status.DONE,
+//                LocalDateTime.of(2002, 1, 1, 0, 0, 0, 0), 20L);
+//
+//        Subtask subtask4 = new Subtask(httpTaskManager.generateId(), "subtask4", "desc of subtask4", Status.DONE,
+//                LocalDateTime.of(2003, 1, 1, 0, 0, 0, 0), 20L);
+//
+//        subtask1.setEpic(epic1);
+//        subtask2.setEpic(epic1);
+//        subtask3.setEpic(epic1);
+//
+//        epic1.addSubtaskToEpic(subtask1);
+//        epic1.addSubtaskToEpic(subtask2);
+//        epic1.addSubtaskToEpic(subtask4);
+//
+//        subtask4.setEpic(epic2);
+//        epic2.addSubtaskToEpic(subtask4);
+//
+//
+//        httpTaskManager.addTask(task1); // 0
+//        httpTaskManager.addTask(task2); // 1  две задачи
+//        httpTaskManager.addEpic(epic1); // 2 эпик с тремя подзадачами
+//        httpTaskManager.addEpic(epic2); // 3 эпик с одной подзадачей
+//        httpTaskManager.addSubtask(subtask1); // 4 подзадача эпика 1
+//        httpTaskManager.addSubtask(subtask2); // 5 подзадача эпика 1
+//        httpTaskManager.addSubtask(subtask3); // 6 подзадача эпика 1
+//        httpTaskManager.addSubtask(subtask4); // 7 подзадача эпика 2
+//
+//        httpTaskManager.getTaskById(1);
+//        httpTaskManager.getTaskById(0);
+//        httpTaskManager.getSubtaskById(4);  // -
+//        httpTaskManager.getSubtaskById(5);  // -
+//        httpTaskManager.getSubtaskById(6);  // -
+//        httpTaskManager.getEpicById(2); // Эпик будет удален со всеми подзадачами
+//        httpTaskManager.getEpicById(3);
+//        httpTaskManager.getSubtaskById(7);
     }
 
     @Test
@@ -89,13 +89,10 @@ class HTTPTaskManagerTest {
         }
 
         HTTPTaskManager httpTaskManager = null;
-        try {
-            httpTaskManager = new HTTPTaskManager("/localhost:8078/");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        httpTaskManager = new HTTPTaskManager("/localhost:8078/");
+
+
 
         // Блок для теста httpTaskManager
         //FileBackedTasksManager fileBackedTasksManager = Managers.getDefault();
@@ -164,13 +161,9 @@ class HTTPTaskManagerTest {
         }
 
         HTTPTaskManager httpTaskManager = null;
-        try {
-            httpTaskManager = new HTTPTaskManager("/localhost:8078/");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        httpTaskManager = new HTTPTaskManager("/localhost:8078/");
+
 
         // Блок для теста httpTaskManager
         //FileBackedTasksManager fileBackedTasksManager = Managers.getDefault();
@@ -375,13 +368,9 @@ class HTTPTaskManagerTest {
         }
 
         HTTPTaskManager httpTaskManager = null;
-        try {
-            httpTaskManager = new HTTPTaskManager("/localhost:8078/");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        httpTaskManager = new HTTPTaskManager("/localhost:8078/");
+
 
         // Блок для теста httpTaskManager
         //FileBackedTasksManager fileBackedTasksManager = Managers.getDefault();
@@ -450,13 +439,8 @@ class HTTPTaskManagerTest {
         }
 
         HTTPTaskManager httpTaskManager = null;
-        try {
-            httpTaskManager = new HTTPTaskManager("/localhost:8078/");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        httpTaskManager = new HTTPTaskManager("/localhost:8078/");
+
 
         // Блок для теста httpTaskManager
         //FileBackedTasksManager fileBackedTasksManager = Managers.getDefault();
@@ -525,13 +509,9 @@ class HTTPTaskManagerTest {
         }
 
         HTTPTaskManager httpTaskManager = null;
-        try {
-            httpTaskManager = new HTTPTaskManager("/localhost:8078/");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        httpTaskManager = new HTTPTaskManager("/localhost:8078/");
+
 
         // Блок для теста httpTaskManager
         //FileBackedTasksManager fileBackedTasksManager = Managers.getDefault();
@@ -552,13 +532,8 @@ class HTTPTaskManagerTest {
         }
 
         HTTPTaskManager httpTaskManager = null;
-        try {
-            httpTaskManager = new HTTPTaskManager("/localhost:8078/");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        httpTaskManager = new HTTPTaskManager("/localhost:8078/");
+
 
         // Блок для теста httpTaskManager
         //FileBackedTasksManager fileBackedTasksManager = Managers.getDefault();
@@ -580,14 +555,18 @@ class HTTPTaskManagerTest {
 
         HTTPTaskManager httpTaskManager = new HTTPTaskManager("/localhost:8078/");
 
-        Epic epic1 = new Epic(httpTaskManager.generateId(), "Epic1 with three subtasks", "desc", Status.NEW);
+        Epic epic1 = new Epic(httpTaskManager.generateId(), "Epic1", "desc", Status.NEW);
 
-        httpTaskManager.addEpic(epic1);
+
         Subtask subtask1 = new Subtask(httpTaskManager.generateId(), "subtask1", "desc of subtask1", Status.NEW,
                 LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0), 20L);
 
-        subtask1.setEpic(epic1);
         epic1.addSubtaskToEpic(subtask1);
+        subtask1.setEpic(epic1);
+
+        httpTaskManager.addEpic(epic1);
+
+
 
         Assertions.assertEquals(1, httpTaskManager.allEpics.size());
     }
@@ -601,13 +580,8 @@ class HTTPTaskManagerTest {
         }
 
         HTTPTaskManager httpTaskManager = null;
-        try {
-            httpTaskManager = new HTTPTaskManager("/localhost:8078/");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        httpTaskManager = new HTTPTaskManager("/localhost:8078/");
+
 
         // Блок для теста httpTaskManager
         //FileBackedTasksManager fileBackedTasksManager = Managers.getDefault();
@@ -632,19 +606,20 @@ class HTTPTaskManagerTest {
         }
 
         HTTPTaskManager httpTaskManager = null;
-        try {
-            httpTaskManager = new HTTPTaskManager("/localhost:8078/");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        httpTaskManager = new HTTPTaskManager("/localhost:8078/");
+
+        Epic epic1 = new Epic(httpTaskManager.generateId(), "Epic1", "desc", Status.NEW);
 
         Subtask subtask1 = new Subtask(0, "subtask1", "desc of subtask1", Status.NEW,
                 LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0), 20L);
 
         Subtask subtask2 = new Subtask(0, "subtask1", "desc of subtask1", Status.DONE,
                 LocalDateTime.of(1998, 1, 1, 0, 0, 0, 0), 20L);
+
+        epic1.addSubtaskToEpic(subtask1);
+        epic1.addSubtaskToEpic(subtask2);
+        subtask1.setEpic(epic1);
+        subtask2.setEpic(epic1);
 
         httpTaskManager.addSubtask(subtask1);
         httpTaskManager.updateSubtask(subtask2);
@@ -665,13 +640,9 @@ class HTTPTaskManagerTest {
         }
 
         HTTPTaskManager httpTaskManager = null;
-        try {
-            httpTaskManager = new HTTPTaskManager("/localhost:8078/");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        httpTaskManager = new HTTPTaskManager("/localhost:8078/");
+
 
         // Блок для теста httpTaskManager
         //FileBackedTasksManager fileBackedTasksManager = Managers.getDefault();
@@ -696,16 +667,12 @@ class HTTPTaskManagerTest {
         }
 
         HTTPTaskManager httpTaskManager = null;
-        try {
-            httpTaskManager = new HTTPTaskManager("/localhost:8078/");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        httpTaskManager = new HTTPTaskManager("/localhost:8078/");
+
 
         // Блок для теста httpTaskManager
         //FileBackedTasksManager fileBackedTasksManager = Managers.getDefault();
+        Epic epic1 = new Epic(httpTaskManager.generateId(), "Epic1", "desc", Status.NEW);
         Subtask subtask1 = new Subtask(0, "subtask1", "desc of subtask1", Status.NEW,
                 LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0), 20L);
 
